@@ -1,0 +1,12 @@
+// Define variables
+$login-container-font: 'Jost', sans-serif;
+$login-container-monospace-font: 'Roboto Mono', monospace;
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: $login-container-font, $login-container-monospace-font;
+}

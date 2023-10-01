@@ -1,0 +1,21 @@
+$size__site_content_width: 1024px;
+
+$media_queries: (
+    'mobile': "screen and (max-width: 667px)",
+    'tablet': "screen and (min-width: 668px) and (max-width: #{$size__site_content_width})"
+);
+
+@mixin for_breakpoint($breakpoints) {
+    $conditions: ();
+    @each $breakpoint in $breakpoints {
+        $conditions: append(
+            $conditions,
+            map-get($media_queries, $breakpoint),
+            comma
+        );
+    }
+
+    @media #{$conditions} {
+        @content;
+    }
+}

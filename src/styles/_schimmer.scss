@@ -1,0 +1,52 @@
+// Define variables
+$shimmer-background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
+$shimmer-animation-duration: 1.5s;
+$shimmer-animation-type: infinite linear;
+
+.shimmer {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: $shimmer-background;
+  background-size: 200% 100%;
+  animation: shimmer $shimmer-animation-duration $shimmer-animation-type;
+}
+
+.avatar-shimmer {
+  @extend .shimmer;
+}
+
+.name-shimmer {
+  background: $shimmer-background 0 0 / 200% 100%;
+  width: 10rem;
+  height: 2rem;
+  margin-left: 1rem;
+  animation: $shimmer-animation-duration linear $shimmer-animation-type;
+}
+
+.card-content-shimmer {
+  background: $shimmer-background 0 0 / 200% 100%;
+  width: 20rem;
+  height: 5rem;
+  margin: 0.7rem;
+  animation: $shimmer-animation-duration linear $shimmer-animation-type;
+}
+
+.message-shimmer {
+  width: 2rem;
+  height: 1.4rem;
+  background: $shimmer-background;
+  background-size: 200% 100%;
+  animation: shimmer $shimmer-animation-duration $shimmer-animation-type;
+  width: 80%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}

@@ -1,0 +1,28 @@
+@use "media-query";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  background: rgb(236, 236, 236);
+  background: linear-gradient(200deg, rgba(236, 236, 236, 1) 0%, rgba(217, 217, 217, 1) 50%, rgba(236, 236, 236, 1) 100%);
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "inbox chat chat chat";
+  min-height: 100vh;
+  @include media-query.for-breakpoint("tablet") {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "inbox chat";
+  }
+}

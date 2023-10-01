@@ -2,7 +2,7 @@
   "name": "chat-suraksha",
   "version": "1.0.0",
   "description": "chat app using MERN stack and socket.io",
-  "main": "index.js",
+  "source": "index.html",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",

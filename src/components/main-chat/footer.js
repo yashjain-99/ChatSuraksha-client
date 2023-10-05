@@ -27,7 +27,7 @@ const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
           ],
         };
       });
-      fetch(`${config.url}/conversations`, {
+      fetch(`${config.url}/api/conversations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

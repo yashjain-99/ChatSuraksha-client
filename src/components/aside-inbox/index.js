@@ -22,7 +22,7 @@ const AsideInbox = ({
   }, [query]);
   useEffect(() => {
     if (apiQuery !== "") {
-      fetch(`${config.url}/users/search/${apiQuery}`)
+      fetch(`${config.url}/api/users/search/${apiQuery}`)
         .then((res) => res.json())
         .then((data) => {
           setSearchResults(data.users);

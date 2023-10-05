@@ -3,7 +3,7 @@ import { config } from "../constants";
 const useFetch = ({ endpoint, id }) => {
   const [data, setdata] = useState(null);
   const [loading, setloading] = useState(true);
-  const baseUrl = `${config.url}`;
+  const baseUrl = `${config.url}/api`;
   const url = `${baseUrl}${endpoint}${id ? `/${id}` : ""}`;
   useEffect(() => {
     fetch(url)

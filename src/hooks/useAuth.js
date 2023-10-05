@@ -4,7 +4,7 @@ const useAuth = (body, isFromRegister) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const baseUrl = `${config.url}/auth`;
+  const baseUrl = `${config.url}/api/auth`;
   const endpoint = isFromRegister ? "register" : "login";
   const url = `${baseUrl}/${endpoint}`;
 

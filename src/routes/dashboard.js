@@ -5,7 +5,7 @@ import { getAllConversations } from "../hooks/useFetch";
 import useCreateInbox from "../hooks/useCreateInbox";
 import { io } from "socket.io-client";
 import isFromMobile from "../hooks/useIsFromMobile";
-
+import { config } from "../constants";
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
   const userId = metadata.userId;
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [socket, setSocket] = useState(null);
   useEffect(() => {
-    const newSocket = io("https://chat-suraksha-api.onrender.com", {
+    const newSocket = io(config.url, {
       query: { userId, fullName: metadata.fullName },
     });
     setSocket(newSocket);

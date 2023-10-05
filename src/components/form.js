@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useValidate from "../hooks/useValidate";
 import FormBackground from "./form-background";
+import useFormattedUserInput from "../hooks/useFormattedUserInput";
 
 const Form = ({ isFromRegister = false }) => {
   const [data, setData] = useState({});
@@ -22,7 +23,11 @@ const Form = ({ isFromRegister = false }) => {
       console.log(metadataError);
     } else if (metadata) {
       alert("Success");
-      setIsAuthenticated(true);
+      if (isFromRegister) {
+        navigate("/login");
+      } else {
+        setIsAuthenticated(true);
+      }
     }
   }, [loading, metadataError, metadata]);
 
@@ -36,7 +41,11 @@ const Form = ({ isFromRegister = false }) => {
       alert(error);
       return;
     }
-    setData(formDataJson);
+    const formattedUserInput = useFormattedUserInput(
+      formDataJson,
+      isFromRegister
+    );
+    setData(formattedUserInput);
   };
 
   useEffect(() => {

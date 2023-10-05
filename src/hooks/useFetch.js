@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-
+import { config } from "../constants";
 const useFetch = ({ endpoint, id }) => {
   const [data, setdata] = useState(null);
   const [loading, setloading] = useState(true);
-  const baseUrl = "https://chat-suraksha-api.onrender.com/api";
+  const baseUrl = `${config.url}`;
   const url = `${baseUrl}${endpoint}${id ? `/${id}` : ""}`;
   useEffect(() => {
     fetch(url)

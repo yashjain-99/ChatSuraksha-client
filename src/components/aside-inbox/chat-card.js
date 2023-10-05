@@ -16,6 +16,14 @@ const ChatCard = ({
       onClick={() => {
         if (chatHistory) {
           setSelectedConversation(chatHistory);
+          if (isFromMobile()) {
+            document.querySelector(".aside-inbox").style.display = "none";
+            try {
+              document
+                .querySelector(".main-chat")
+                .style.removeProperty("display");
+            } catch (error) {}
+          }
         } else {
           const newConversation = {
             otherUserId: id,
@@ -34,14 +42,6 @@ const ChatCard = ({
               ],
             };
           });
-        }
-        if (isFromMobile()) {
-          document.querySelector(".aside-inbox").style.display = "none";
-          try {
-            document
-              .querySelector(".main-chat")
-              .style.removeProperty("display");
-          } catch (error) {}
         }
       }}
       key={id}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { config } from "../../constants";
 const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
   const [message, setMessage] = useState("");
   const sendMessage = () => {
@@ -27,7 +27,7 @@ const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
           ],
         };
       });
-      fetch("https://chat-suraksha-api.onrender.com/api/conversations", {
+      fetch(`${config.url}/conversations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

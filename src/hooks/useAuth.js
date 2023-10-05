@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
-
-const useAuth = (
-  { email, password, firstName, lastName, profilePicture },
-  isFromRegister
-) => {
+import { config } from "../constants";
+const useAuth = (body, isFromRegister) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const baseUrl = "https://chat-suraksha-api.onrender.com/api/auth";
+  const baseUrl = `${config.url}/auth`;
   const endpoint = isFromRegister ? "register" : "login";
   const url = `${baseUrl}/${endpoint}`;
-  const fullName = `${firstName}${lastName ? " " + lastName : ""}`;
-  const body = isFromRegister
-    ? { email, password, fullName, profilePicture }
-    : { email, password };
 
   useEffect(() => {
     if (body.email && body.password) {
@@ -34,15 +27,15 @@ const useAuth = (
         .then((resData) => {
           if (!isFromRegister) localStorage.setItem("token", resData.token);
           setData(resData);
-          setError(null); // Clear any previous error.
-          setLoading(false); // Set loading back to false.
+          setError(null);
+          setLoading(false);
         })
         .catch((error) => {
           setError(error.message || "An error occurred.");
-          setLoading(false); // Set loading back to false.
+          setLoading(false);
         });
     }
-  }, [email, password, firstName, lastName, profilePicture, isFromRegister]);
+  }, [body, isFromRegister]);
 
   return { data, loading, error };
 };

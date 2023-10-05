@@ -1,7 +1,7 @@
 import Header from "./header";
 import ChatCard from "./chat-card";
 import { useEffect, useState } from "react";
-
+import { config } from "../../constants";
 const AsideInbox = ({
   setSelectedConversation,
   inbox,
@@ -22,9 +22,7 @@ const AsideInbox = ({
   }, [query]);
   useEffect(() => {
     if (apiQuery !== "") {
-      fetch(
-        `https://chat-suraksha-api.onrender.com/api/users/search/${apiQuery}`
-      )
+      fetch(`${config.url}/users/search/${apiQuery}`)
         .then((res) => res.json())
         .then((data) => {
           setSearchResults(data.users);

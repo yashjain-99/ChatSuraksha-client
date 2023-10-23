@@ -1,43 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { config } from "../constants";
-const useAuth = (body, isFromRegister) => {
+import axios from "axios";
+import AuthContext from "../contexts/AuthProvider";
+
+const useAuth = (body, isFromRegister, setLoading) => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const baseUrl = `${config.url}/api/auth`;
   const endpoint = isFromRegister ? "register" : "login";
   const url = `${baseUrl}/${endpoint}`;
-
+  const { setAuth } = useContext(AuthContext);
   useEffect(() => {
-    if (body.email && body.password) {
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorData = await res.json();
+    const fetchData = async () => {
+      try {
+        if (body.email && body.password) {
+          const response = await axios.post(url, JSON.stringify(body), {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          });
+
+          if (response.status !== 200) {
+            const errorData = response.data;
             throw new Error(errorData.error);
           }
-          return res.json();
-        })
-        .then((resData) => {
-          if (!isFromRegister) localStorage.setItem("token", resData.token);
+
+          const resData = response.data;
+
+          if (!isFromRegister) {
+            setAuth({ accessToken: resData.token });
+          }
+
           setData(resData);
           setError(null);
           setLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message || "An error occurred.");
-          setLoading(false);
-        });
-    }
+        }
+      } catch (error) {
+        setError(error?.response?.data?.error || "An error occurred.");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [body, isFromRegister]);
 
-  return { data, loading, error };
+  return { data, error };
 };
 
 export default useAuth;

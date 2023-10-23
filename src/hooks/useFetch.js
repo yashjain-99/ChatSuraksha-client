@@ -1,44 +1,52 @@
 import { useEffect, useState } from "react";
 import { config } from "../constants";
-const useFetch = ({ endpoint, id }) => {
-  const [data, setdata] = useState(null);
-  const [loading, setloading] = useState(true);
+import axios from "axios";
+
+const useFetch = ({ endpoint, id, setPercentCompleted }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const baseUrl = `${config.url}/api`;
   const url = `${baseUrl}${endpoint}${id ? `/${id}` : ""}`;
+
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setdata(data);
-        setloading(false);
-      });
+    const fetchData = async () => {
+      try {
+        axios
+          .get(url, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+            onDownloadProgress: function (progressEvent) {
+              setPercentCompleted(
+                Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              );
+            },
+          })
+          .then((response) => {
+            setData(response.data);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [url]);
 
   return { data, loading };
 };
 
-export const useInitialSetup = () => {
-  const { data: metadata, loading: metadataLoading } = useFetch({
-    endpoint: "/metadata",
-  });
-  const { data: inbox, loading: inboxLoading } = useFetch({
-    endpoint: "/inbox",
-  });
-  const [allLoaded, setAllLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!metadataLoading && !inboxLoading) {
-      setAllLoaded(true);
-    }
-  }, [metadataLoading, inboxLoading]);
-
-  return { metadata, inbox, allLoaded };
-};
-
-export const getAllConversations = (userId, setConversations, setLoading) => {
+export const getAllConversations = (
+  userId,
+  setConversations,
+  setLoading,
+  setPercentCompleted
+) => {
   const { data: conversations, loading } = useFetch({
     endpoint: "/conversations",
     id: userId,
+    setPercentCompleted,
   });
   useEffect(() => {
     if (!loading) {

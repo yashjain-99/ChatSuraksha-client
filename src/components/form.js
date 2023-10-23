@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import useValidate from "../hooks/useValidate";
+import useValidate from "../hooks/useValidateFormData";
 import FormBackground from "./form-background";
 import useFormattedUserInput from "../hooks/useFormattedUserInput";
+import Loader from "./loader";
 
 const Form = ({ isFromRegister = false }) => {
   const [data, setData] = useState({});
-  const {
-    data: metadata,
-    loading,
-    error: metadataError,
-  } = useAuth(data, isFromRegister);
+  const [loading, setLoading] = useState(false);
+  const { data: metadata, error: metadataError } = useAuth(
+    data,
+    isFromRegister,
+    setLoading
+  );
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -19,7 +21,7 @@ const Form = ({ isFromRegister = false }) => {
     if (loading) {
       console.log("Loading...");
     } else if (metadataError) {
-      alert("Error");
+      alert(metadataError);
       console.log(metadataError);
     } else if (metadata) {
       alert("Success");
@@ -33,6 +35,7 @@ const Form = ({ isFromRegister = false }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.target;
     const formData = new FormData(form);
     const formDataJson = Object.fromEntries(formData);
@@ -54,6 +57,8 @@ const Form = ({ isFromRegister = false }) => {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
+
+  if (loading) return <Loader />;
 
   return (
     <>

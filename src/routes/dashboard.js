@@ -6,12 +6,20 @@ import useCreateInbox from "../hooks/useCreateInbox";
 import { io } from "socket.io-client";
 import isFromMobile from "../hooks/useIsFromMobile";
 import { config } from "../constants";
+import Loader from "../components/loader";
+
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
   const userId = metadata.userId;
   const [conversations, setConversations] = useState({});
   const [loading, setLoading] = useState(true);
-  getAllConversations(userId, setConversations, setLoading);
+  const [percentCompleted, setPercentCompleted] = useState(0);
+  getAllConversations(
+    userId,
+    setConversations,
+    setLoading,
+    setPercentCompleted
+  );
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [socket, setSocket] = useState(null);
   useEffect(() => {
@@ -51,7 +59,7 @@ const Dashboard = () => {
     });
   }, [socket]);
 
-  if (loading) return null;
+  if (loading) return <Loader />;
   const { inbox, conversationHistory, conversedWith } = useCreateInbox(
     conversations.conversationsWithUserDetails
   );

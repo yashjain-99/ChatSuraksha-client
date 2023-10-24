@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { createRoot } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./routes/dashboard";
 import Login from "./routes/login";

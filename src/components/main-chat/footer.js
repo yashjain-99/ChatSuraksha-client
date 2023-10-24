@@ -45,18 +45,25 @@ const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage();
+  };
+
   return (
-    <footer className="main-chat-footer">
-      <input
-        type="text"
-        className="main-chat-footer-input"
-        placeholder="Type a message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <button className="main-chat-footer-send-button" onClick={sendMessage}>
-        &gt;
-      </button>
+    <footer>
+      <form className="main-chat-footer" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="main-chat-footer-input"
+          placeholder="Type a message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button type="submit" className="main-chat-footer-send-button">
+          &gt;
+        </button>
+      </form>
     </footer>
   );
 };

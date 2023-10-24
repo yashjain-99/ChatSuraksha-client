@@ -31,11 +31,16 @@
       }
     }
 
-    &-content-name {
-      color: $text-color-white-accent;
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-left: 1rem;
+    &-content{
+      display: flex;
+      width: 9rem;
+      justify-content: space-between;
+      &-name {
+        color: $text-color-white-accent;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-left: 1rem;
+      }
     }
   }
 

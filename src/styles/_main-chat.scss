@@ -46,6 +46,7 @@
   &-messages {
     grid-area: content;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: stretch;

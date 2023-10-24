@@ -24,7 +24,10 @@ const MainChat = ({
     <div className="main-chat">
       <Header metadata={metadata} />
       <main className="main-chat-messages" id="main-chat-messages">
-        <Conversations conversations={data} socket={socket} />
+        <Conversations
+          conversations={data}
+          selectedConversation={selectedConversation}
+        />
       </main>
       <Footer
         selectedConversation={selectedConversation}

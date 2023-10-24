@@ -15,8 +15,11 @@ const useCreateInbox = (conversationsWithUserDetails) => {
         date: element.date,
         self: element.senderId !== element.otherUserId,
       });
+      const index = conversedWith.indexOf(element.otherUserId);
+      conversedWith.splice(index, 1);
+      conversedWith.unshift(element.otherUserId);
     } else {
-      conversedWith.push(element.otherUserId);
+      conversedWith.unshift(element.otherUserId);
       inbox[element.otherUserId] = {
         fullName: element.otherUserName,
         avatar:
@@ -45,6 +48,7 @@ const useCreateInbox = (conversationsWithUserDetails) => {
       };
     }
   });
+
   return { inbox, conversationHistory, conversedWith };
 };
 

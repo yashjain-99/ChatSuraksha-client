@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import isFromMobile from "../hooks/useIsFromMobile";
 import { config } from "../constants";
 import Loader from "../components/loader";
+import { motion, useIsPresent, AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
@@ -14,6 +15,7 @@ const Dashboard = () => {
   const [conversations, setConversations] = useState({});
   const [loading, setLoading] = useState(true);
   const [percentCompleted, setPercentCompleted] = useState(0);
+  const isPresent = useIsPresent();
   getAllConversations(
     userId,
     setConversations,
@@ -68,20 +70,35 @@ const Dashboard = () => {
       className="layout-grid"
       style={isFromMobile() ? { display: "block" } : {}}
     >
-      <AsideInbox
-        setSelectedConversation={setSelectedConversation}
-        inbox={inbox}
-        conversedWith={conversedWith}
-        metadata={metadata}
-        setConversations={setConversations}
-      />
-      <MainChat
-        selectedConversation={selectedConversation}
-        conversationHistory={conversationHistory[selectedConversation]}
-        userId={userId}
-        socket={socket}
-        setConversations={setConversations}
-      />
+      <AnimatePresence key="AnimatePresence-dashboard">
+        <AsideInbox
+          setSelectedConversation={setSelectedConversation}
+          inbox={inbox}
+          conversedWith={conversedWith}
+          metadata={metadata}
+          setConversations={setConversations}
+          key="AsideInbox"
+        />
+        <MainChat
+          selectedConversation={selectedConversation}
+          conversationHistory={conversationHistory[selectedConversation]}
+          userId={userId}
+          socket={socket}
+          setConversations={setConversations}
+          key="MainChat"
+        />
+        <motion.div
+          initial={{ scaleX: 1 }}
+          animate={{
+            scaleX: 0,
+            transition: { duration: 0.8, ease: "circOut" },
+          }}
+          exit={{ scaleX: 1, transition: { duration: 0.8, ease: "circIn" } }}
+          style={{ originX: isPresent ? 0 : 1 }}
+          className="privacy-screen"
+          key="motion-div-dashboard"
+        />
+      </AnimatePresence>
     </div>
   );
 };

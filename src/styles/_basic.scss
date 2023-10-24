@@ -3,6 +3,23 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  &::-webkit-scrollbar-track
+  {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar
+  {
+    width: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb
+  {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+  }
 }
 
 html {
@@ -26,3 +43,37 @@ body {
       grid-template-areas: "inbox chat";
   }
 }
+
+.privacy-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* You can adjust the opacity to your liking */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Adjust the z-index value to position it above other elements */
+
+  /* You can add additional styles for text or icons to indicate the purpose of the screen */
+  color: #fff;
+  font-size: 24px;
+}
+
+/* You can also add transitions to create smooth animations */
+.privacy-screen {
+  transition: opacity 0.3s ease;
+}
+
+/* Hide the privacy screen when not in use */
+.privacy-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+
+
+
+

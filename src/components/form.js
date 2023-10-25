@@ -42,6 +42,7 @@ const Form = ({ isFromRegister = false }) => {
     const { error, isValid } = useValidate(formDataJson, isFromRegister);
     if (!isValid) {
       alert(error);
+      setLoading(false);
       return;
     }
     const formattedUserInput = useFormattedUserInput(

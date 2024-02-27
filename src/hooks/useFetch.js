@@ -96,7 +96,6 @@ export const getInbox = (
     id: userId,
     setPercentCompleted,
   });
-  console.log(inbox);
   useEffect(() => {
     if (!loading) {
       setConversationInbox(inbox.inbox);

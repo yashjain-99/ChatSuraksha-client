@@ -47,7 +47,6 @@ const MainChat = ({
   const selectedUser = inbox.find(
     (item) => item.otherUserId === selectedConversationId
   );
-  console.log(selectedUser);
   const metadata = {
     name: selectedUser.otherUserName,
     avatar:

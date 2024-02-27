@@ -1,8 +1,7 @@
 import AsideInbox from "../components/aside-inbox";
 import MainChat from "../components/main-chat";
 import { useState, useEffect } from "react";
-import { getAllConversations } from "../hooks/useFetch";
-import useCreateInbox from "../hooks/useCreateInbox";
+import { getInbox } from "../hooks/useFetch";
 import { io } from "socket.io-client";
 import isFromMobile from "../hooks/useIsFromMobile";
 import { config } from "../constants";
@@ -12,17 +11,12 @@ import { motion, useIsPresent, AnimatePresence } from "framer-motion";
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
   const userId = metadata.userId;
-  const [conversations, setConversations] = useState({});
+  const [inbox, setInbox] = useState({});
   const [loading, setLoading] = useState(true);
   const [percentCompleted, setPercentCompleted] = useState(0);
   const isPresent = useIsPresent();
-  getAllConversations(
-    userId,
-    setConversations,
-    setLoading,
-    setPercentCompleted
-  );
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  getInbox(userId, setInbox, setLoading, setPercentCompleted);
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     const newSocket = io(config.url, {
@@ -38,33 +32,23 @@ const Dashboard = () => {
   useEffect(() => {
     socket?.emit("addUser", userId);
     socket?.on("getMessage", (data) => {
-      //add into conversationWithUserDetails
-      const newConversations = {
-        //date in right format
-        date: new Date().toISOString(),
+      const newInbox = {
         otherUserId: data.senderId,
+        lastMessage: data.text,
+        lastMessageDate: new Date().toISOString(),
         otherUserName: data.fullName,
         otherUserProfilePicture: "",
-        reciepientId: data.reciepientId,
-        senderId: data.senderId,
-        text: data.text,
       };
-      setConversations((prev) => {
-        return {
-          ...prev,
-          conversationsWithUserDetails: [
-            ...prev.conversationsWithUserDetails,
-            newConversations,
-          ],
-        };
+      setInbox((prevInbox) => {
+        const updatedPrevInbox = prevInbox.filter(
+          (inboxObj) => inboxObj.otherUserId != data.senderId
+        );
+        return [newInbox, ...updatedPrevInbox];
       });
     });
   }, [socket]);
 
   if (loading) return <Loader />;
-  const { inbox, conversationHistory, conversedWith } = useCreateInbox(
-    conversations.conversationsWithUserDetails
-  );
   return (
     <div
       className="layout-grid"
@@ -72,19 +56,18 @@ const Dashboard = () => {
     >
       <AnimatePresence key="AnimatePresence-dashboard">
         <AsideInbox
-          setSelectedConversation={setSelectedConversation}
+          setSelectedConversationId={setSelectedConversationId}
           inbox={inbox}
-          conversedWith={conversedWith}
+          setInbox={setInbox}
           metadata={metadata}
-          setConversations={setConversations}
           key="AsideInbox"
         />
         <MainChat
-          selectedConversation={selectedConversation}
-          conversationHistory={conversationHistory[selectedConversation]}
           userId={userId}
+          selectedConversationId={selectedConversationId}
           socket={socket}
-          setConversations={setConversations}
+          inbox={inbox}
+          setInbox={setInbox}
           key="MainChat"
         />
         <motion.div

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-const Conversations = ({ conversations, selectedConversation }) => {
+const Conversations = ({ conversations, selectedConversationId }) => {
   if (conversations.length === 0) return null;
   return (
     <>
@@ -17,7 +17,7 @@ const Conversations = ({ conversations, selectedConversation }) => {
               duration: 0.2,
               type: "spring",
             }}
-            key={`${selectedConversation}-${index}`}
+            key={`${selectedConversationId}-${index}`}
           >
             <div className="main-chat-messages-message-content">
               <p className="main-chat-messages-message-content-text">

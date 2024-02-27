@@ -3,19 +3,18 @@ const ChatCard = ({
   name,
   avatar,
   lastMessage,
-  chatHistory,
-  setSelectedConversation,
+  userInInbox,
+  setSelectedConversationId,
   id,
   index,
-  setConversations,
-  isFromSearch = false,
+  setInbox = () => {},
 }) => {
   return (
     <section
       className="chat-card "
       onClick={() => {
-        if (chatHistory) {
-          setSelectedConversation(chatHistory);
+        if (userInInbox) {
+          setSelectedConversationId(id);
           if (isFromMobile()) {
             document.querySelector(".aside-inbox").style.display = "none";
             try {
@@ -25,22 +24,20 @@ const ChatCard = ({
             } catch (error) {}
           }
         } else {
-          const newConversation = {
+          const newInbox = {
             otherUserId: id,
+            lastMessage: "",
+            lastMessageDate: new Date().toISOString(),
             otherUserName: name,
             otherUserProfilePicture: avatar,
-            reciepientId: id,
-            senderId: JSON.parse(localStorage.getItem("metadata")).userId,
-            text: "",
           };
-          setConversations((prev) => {
-            return {
-              ...prev,
-              conversationsWithUserDetails: [
-                ...prev.conversationsWithUserDetails,
-                newConversation,
-              ],
-            };
+          const newConversation = {
+            date: new Date().toISOString(),
+            message: "",
+            self: true,
+          };
+          setInbox((prevInbox) => {
+            return [newInbox, ...prevInbox];
           });
         }
       }}

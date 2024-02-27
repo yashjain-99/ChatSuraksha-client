@@ -1,31 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { config } from "../../constants";
-const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
+const Footer = ({
+  selectedConversationId,
+  setInbox,
+  userId,
+  socket,
+  setConversations,
+  metadata,
+}) => {
   const [message, setMessage] = useState("");
   const sendMessage = () => {
     if (message !== "") {
       socket.emit("sendMessage", {
         senderId: userId,
-        reciepientId: selectedConversation,
+        reciepientId: selectedConversationId,
         text: message,
       });
-      const newConversations = {
-        date: new Date().toISOString(),
-        otherUserId: selectedConversation,
-        otherUserName: "",
-        otherUserProfilePicture: "",
-        reciepientId: selectedConversation,
-        senderId: userId,
-        text: message,
+      const newInbox = {
+        otherUserId: selectedConversationId,
+        lastMessage: message,
+        lastMessageDate: new Date().toISOString(),
+        otherUserName: metadata.name,
+        otherUserProfilePicture: metadata.avatar,
       };
+      const newConversation = {
+        date: new Date().toISOString(),
+        message,
+        self: true,
+      };
+      setInbox((prevInbox) => {
+        const updatedPrevInbox = prevInbox.filter(
+          (inboxObj) => inboxObj.otherUserId != selectedConversationId
+        );
+        return [newInbox, ...updatedPrevInbox];
+      });
       setConversations((prev) => {
-        return {
-          ...prev,
-          conversationsWithUserDetails: [
-            ...prev.conversationsWithUserDetails,
-            newConversations,
-          ],
-        };
+        return [...prev, newConversation];
       });
       fetch(`${config.url}/api/conversations`, {
         method: "POST",
@@ -34,7 +44,7 @@ const Footer = ({ selectedConversation, userId, socket, setConversations }) => {
         },
         body: JSON.stringify({
           senderId: userId,
-          reciepientId: selectedConversation,
+          reciepientId: selectedConversationId,
           text: message,
         }),
       }).then((res) => {

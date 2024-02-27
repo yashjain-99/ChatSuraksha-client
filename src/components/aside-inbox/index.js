@@ -3,11 +3,10 @@ import ChatCard from "./chat-card";
 import { useEffect, useState } from "react";
 import { config } from "../../constants";
 const AsideInbox = ({
-  setSelectedConversation,
+  setSelectedConversationId,
   inbox,
-  conversedWith,
   metadata,
-  setConversations,
+  setInbox,
 }) => {
   const [query, setQuery] = useState("");
   const [apiQuery, setApiQuery] = useState("");
@@ -46,6 +45,9 @@ const AsideInbox = ({
         {searchResults.length > 0 && query != "" && (
           <div className="aside-inbox-search-results">
             {searchResults.map((user, index) => {
+              const userInInbox = inbox.find(
+                (item) => item.otherUserId === user.id
+              );
               return (
                 <ChatCard
                   key={user.id}
@@ -56,12 +58,11 @@ const AsideInbox = ({
                       : user.profilePicture
                   }
                   lastMessage={""}
-                  chatHistory={inbox[user.id]?.conversationHistoryId}
-                  setSelectedConversation={setSelectedConversation}
+                  userInInbox={userInInbox}
+                  setSelectedConversationId={setSelectedConversationId}
                   id={user.id}
                   index={index}
-                  isFromSearch={true}
-                  setConversations={setConversations}
+                  setInbox={setInbox}
                 />
               );
             })}
@@ -69,16 +70,20 @@ const AsideInbox = ({
         )}
       </div>
       <div className="aside-inbox-chats">
-        {conversedWith.map((conversationId, index) => {
+        {inbox.map((inboxObj, index) => {
           return (
             <ChatCard
-              key={conversationId}
-              name={inbox[conversationId].fullName}
-              avatar={inbox[conversationId].avatar}
-              lastMessage={inbox[conversationId].lastMessage}
-              chatHistory={inbox[conversationId].conversationHistoryId}
-              setSelectedConversation={setSelectedConversation}
-              id={conversationId}
+              key={inboxObj.otherUserId}
+              name={inboxObj.otherUserName}
+              avatar={
+                inboxObj.otherUserProfilePicture === ""
+                  ? "https://placekitten.com/100/100"
+                  : inboxObj.otherUserProfilePicture
+              }
+              lastMessage={inboxObj.lastMessage}
+              userInInbox={true}
+              setSelectedConversationId={setSelectedConversationId}
+              id={inboxObj.otherUserId}
               index={index}
             />
           );

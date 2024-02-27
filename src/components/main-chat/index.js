@@ -1,39 +1,79 @@
+import React, { useEffect, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
 import Conversations from "./conversations";
-import { useEffect } from "react";
+import { getConversation } from "../../hooks/useFetch";
 
 const MainChat = ({
-  selectedConversation,
-  conversationHistory,
+  selectedConversationId,
+  setInbox,
   userId,
   socket,
-  setConversations,
+  inbox,
 }) => {
-  if (selectedConversation === null) return null;
-  const { fullName, avatar, data } = conversationHistory;
-  const metadata = {
-    name: fullName,
-    avatar,
-  };
+  if (selectedConversationId === null) return null;
+  const [loading, setLoading] = useState(true);
+  const [conversations, setConversations] = useState([]);
   useEffect(() => {
-    var objDiv = document.getElementById("main-chat-messages");
-    objDiv.scrollTop = objDiv.scrollHeight;
-  });
+    socket?.on("getMessage", (data) => {
+      const newConversation = {
+        date: new Date().toISOString(),
+        message: data.text,
+        self: false,
+      };
+
+      setConversations((prev) => {
+        return [...prev, newConversation];
+      });
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    setLoading(true);
+    getConversation(
+      userId,
+      selectedConversationId,
+      setConversations,
+      setLoading
+    );
+  }, [userId, selectedConversationId]);
+
+  useEffect(() => {
+    if (conversations.length > 0) {
+      var objDiv = document.getElementById("main-chat-messages");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
+  }, [conversations]);
+  const selectedUser = inbox.find(
+    (item) => item.otherUserId === selectedConversationId
+  );
+  console.log(selectedUser);
+  const metadata = {
+    name: selectedUser.otherUserName,
+    avatar:
+      selectedUser.otherUserProfilePicture === ""
+        ? "https://placekitten.com/100/100"
+        : selectedUser.otherUserProfilePicture,
+  };
+
   return (
     <div className="main-chat">
       <Header metadata={metadata} />
       <main className="main-chat-messages" id="main-chat-messages">
-        <Conversations
-          conversations={data}
-          selectedConversation={selectedConversation}
-        />
+        {!loading && (
+          <Conversations
+            conversations={conversations}
+            selectedConversationId={selectedConversationId}
+          />
+        )}
       </main>
       <Footer
-        selectedConversation={selectedConversation}
+        selectedConversationId={selectedConversationId}
         userId={userId}
         socket={socket}
         setConversations={setConversations}
+        setInbox={setInbox}
+        metadata={metadata}
       />
     </div>
   );

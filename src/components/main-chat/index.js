@@ -16,15 +16,17 @@ const MainChat = ({
   const [conversations, setConversations] = useState([]);
   useEffect(() => {
     socket?.on("getMessage", (data) => {
-      const newConversation = {
-        date: new Date().toISOString(),
-        message: data.text,
-        self: false,
-      };
+      if (data.senderId == selectedConversationId) {
+        const newConversation = {
+          date: new Date().toISOString(),
+          message: data.text,
+          self: false,
+        };
 
-      setConversations((prev) => {
-        return [...prev, newConversation];
-      });
+        setConversations((prev) => {
+          return [...prev, newConversation];
+        });
+      }
     });
   }, [socket]);
 

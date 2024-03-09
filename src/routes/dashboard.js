@@ -7,11 +7,15 @@ import isFromMobile from "../hooks/useIsFromMobile";
 import { config } from "../constants";
 import Loader from "../components/loader";
 import { motion, useIsPresent, AnimatePresence } from "framer-motion";
+import UpdateProfilePictureModal from "../components/upload-profile-picture-modal";
 
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
   const userId = metadata.userId;
   const [inbox, setInbox] = useState({});
+  const [userProfilePicture, setUserProfilePicture] = useState(
+    metadata.profilePicture
+  );
   const [loading, setLoading] = useState(true);
   const [percentCompleted, setPercentCompleted] = useState(0);
   const isPresent = useIsPresent();
@@ -59,6 +63,7 @@ const Dashboard = () => {
           setSelectedConversationId={setSelectedConversationId}
           inbox={inbox}
           setInbox={setInbox}
+          userProfilePicture={userProfilePicture}
           metadata={metadata}
           key="AsideInbox"
         />
@@ -82,6 +87,9 @@ const Dashboard = () => {
           key="motion-div-dashboard"
         />
       </AnimatePresence>
+      <UpdateProfilePictureModal
+        setUserProfilePicture={setUserProfilePicture}
+      />
     </div>
   );
 };

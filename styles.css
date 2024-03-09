@@ -110,6 +110,36 @@ body {
   font-weight: 700;
   margin-left: 1rem;
 }
+.aside-inbox-header-content .drop-down-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 0;
+  transition: all 0.3s ease;
+}
+.aside-inbox-header-content .drop-down-menu-active {
+  border: 1px solid #cccccc;
+  max-height: 200px; /* Adjust as needed */
+}
+.aside-inbox-header-content .drop-down-menu-item {
+  display: flex;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.aside-inbox-header-content .drop-down-menu-item:hover {
+  background-color: #f0f0f0;
+}
+.aside-inbox-header-content .drop-down-menu-item span {
+  display: block;
+}
+.aside-inbox-header-content .drop-down-menu-item svg {
+  margin-left: 8px;
+}
 .aside-inbox-search-container {
   grid-area: search;
   background-color: #202c33;
@@ -155,9 +185,10 @@ body {
   background-color: #333;
 }
 .chat-card-avatar {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
+  background-color: #ccc;
   aspect-ratio: 1/1;
 }
 .chat-card-avatar-img {
@@ -411,6 +442,37 @@ body {
   font-size: 1.2rem;
   font-weight: 400;
 }
+.form-body .custom-file-input-button {
+  width: 100%;
+  height: 4rem;
+  border-radius: 2rem;
+  background-color: #212d63;
+  outline: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.form-body .custom-file-input-button:hover {
+  background-color: #5469d4;
+  transform: scale(1.1);
+}
+.form-body .custom-file-input-button:disabled {
+  background-color: #ccc;
+  color: #fff;
+  cursor: not-allowed;
+}
+.form-body input[type=file] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 
 .form-footer {
   display: flex;
@@ -464,8 +526,8 @@ body {
   transition: background-color 0.3s ease;
 }
 .main-chat-header-avatar {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   background-color: #ccc;
 }
@@ -546,8 +608,8 @@ body {
   border: 1px solid #1da1f2;
 }
 .main-chat-footer-send-button {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   border: none;
   border-radius: 50%;
   background-color: #005c4b;

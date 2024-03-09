@@ -1,3 +1,4 @@
+import { defaultUserImage } from "../../constants";
 import isFromMobile from "../../hooks/useIsFromMobile";
 const ChatCard = ({
   name,
@@ -44,7 +45,15 @@ const ChatCard = ({
       key={id}
     >
       <div className="chat-card-avatar">
-        <img src={avatar} className="chat-card-avatar-img" alt="avatar" />
+        <img
+          src={avatar}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = defaultUserImage;
+          }}
+          className="chat-card-avatar-img"
+          alt="avatar"
+        />
       </div>
       <div
         className="chat-card-content"

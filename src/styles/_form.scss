@@ -51,6 +51,40 @@
     font-size: $form-input-font-size;
     font-weight: $form-input-font-weight;
   }
+  .custom-file-input-button {
+      width: 100%;
+      height: $form-input-height;
+      border-radius: $form-input-border-radius;
+      background-color: $blue800-background-color;
+      outline: none;
+      cursor: pointer;
+      font-size: $form-button-font-size;
+      font-weight: $form-button-font-weight;
+      color: $form-button-color;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      &:hover {
+        background-color: $blue-background-color;
+        transform: scale(1.1);
+      }
+      &:disabled {
+        background-color: #ccc;
+        color: $form-button-color;
+        cursor: not-allowed;
+      }
+  }
+
+  // hide the default file input visually
+  // and still make it accessible to screen readers
+  input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
 }
 
 .form-footer {

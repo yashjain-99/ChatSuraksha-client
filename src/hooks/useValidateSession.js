@@ -13,13 +13,14 @@ const validateSession = async (setAuth) => {
       },
       withCredentials: true,
     });
-
+    if (res.status == 200 && res.data) {
+      localStorage.setItem("metadata", JSON.stringify(res.data));
+      setAuth(res.data.token);
+      return true;
+    }
     if (res.status !== 200) {
       return false;
     }
-
-    setAuth(res.data.token);
-    return true;
   } catch (error) {
     console.error("Error validating session:", error);
     return false;

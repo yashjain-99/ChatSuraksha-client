@@ -3,6 +3,7 @@ import Footer from "./footer";
 import Header from "./header";
 import Conversations from "./conversations";
 import { getConversation } from "../../hooks/useFetch";
+import { defaultUserImage } from "../../constants";
 
 const MainChat = ({
   selectedConversationId,
@@ -53,7 +54,7 @@ const MainChat = ({
     name: selectedUser.otherUserName,
     avatar:
       selectedUser.otherUserProfilePicture === ""
-        ? "https://placekitten.com/100/100"
+        ? defaultUserImage
         : selectedUser.otherUserProfilePicture,
   };
 

@@ -1,10 +1,11 @@
 import Header from "./header";
 import ChatCard from "./chat-card";
 import { useEffect, useState } from "react";
-import { config } from "../../constants";
+import { config, defaultUserImage } from "../../constants";
 const AsideInbox = ({
   setSelectedConversationId,
   inbox,
+  userProfilePicture,
   metadata,
   setInbox,
 }) => {
@@ -33,7 +34,7 @@ const AsideInbox = ({
   };
   return (
     <div className="aside-inbox">
-      <Header metadata={metadata} />
+      <Header metadata={metadata} userProfilePicture={userProfilePicture} />
       <div className="aside-inbox-search-container">
         <input
           type="text"
@@ -52,11 +53,7 @@ const AsideInbox = ({
                 <ChatCard
                   key={user.id}
                   name={user.fullName}
-                  avatar={
-                    user.profilePicture === ""
-                      ? "https://placekitten.com/100/100"
-                      : user.profilePicture
-                  }
+                  avatar={user.profilePicture}
                   lastMessage={""}
                   userInInbox={userInInbox}
                   setSelectedConversationId={setSelectedConversationId}
@@ -75,11 +72,7 @@ const AsideInbox = ({
             <ChatCard
               key={inboxObj.otherUserId}
               name={inboxObj.otherUserName}
-              avatar={
-                inboxObj.otherUserProfilePicture === ""
-                  ? "https://placekitten.com/100/100"
-                  : inboxObj.otherUserProfilePicture
-              }
+              avatar={inboxObj.otherUserProfilePicture}
               lastMessage={inboxObj.lastMessage}
               userInInbox={true}
               setSelectedConversationId={setSelectedConversationId}

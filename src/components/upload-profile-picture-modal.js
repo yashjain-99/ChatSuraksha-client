@@ -3,7 +3,7 @@ import Modal from "react-modal";
 
 import { useProfilePictureModalStateContext } from "../contexts/ProfilePictureModalStateProvider";
 import { config, defaultUserImage } from "../constants";
-import { axios } from "../api/axios";
+import axios from "../api/axios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {

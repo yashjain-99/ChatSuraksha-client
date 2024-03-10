@@ -15,7 +15,7 @@ const validateSession = async (setAuth) => {
     });
     if (res.status == 200 && res.data) {
       localStorage.setItem("metadata", JSON.stringify(res.data));
-      setAuth(res.data.token);
+      setAuth({ accessToken: res.data.token, userId: res.data.userId });
       return true;
     }
     if (res.status !== 200) {

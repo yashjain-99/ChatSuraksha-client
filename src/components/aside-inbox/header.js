@@ -1,16 +1,16 @@
-import axios from "axios";
 import { config, defaultUserImage } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthContext } from "../../contexts/AuthProvider";
 import { useProfilePictureModalStateContext } from "../../contexts/ProfilePictureModalStateProvider";
+import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const Header = ({ metadata, userProfilePicture }) => {
   const { setAuth } = useAuthContext();
   const [showDropDown, setShowDropDown] = useState(false);
   const { setIsModalOpen } = useProfilePictureModalStateContext();
-  const profilePicture =
-    metadata.profilePicture === "" ? defaultUserImage : metadata.profilePicture;
+  const axiosPrivate = useAxiosPrivate();
 
   const openUpdateProfilePictureModal = () => {
     setShowDropDown(false);
@@ -20,7 +20,7 @@ const Header = ({ metadata, userProfilePicture }) => {
 
   const logout = async () => {
     const url = `${config.url}/api/auth/logout`;
-    const res = await axios.post(
+    const res = await axiosPrivate.post(
       url,
       { userId: metadata.userId },
       {

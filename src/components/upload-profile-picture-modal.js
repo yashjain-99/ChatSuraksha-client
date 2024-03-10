@@ -1,14 +1,16 @@
 import React, { useState, useRef } from "react";
 import Modal from "react-modal";
-import axios from "axios";
 
 import { useProfilePictureModalStateContext } from "../contexts/ProfilePictureModalStateProvider";
 import { config, defaultUserImage } from "../constants";
+import { axios } from "../api/axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {
   const { isModalOpen, setIsModalOpen } = useProfilePictureModalStateContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const axiosPrivate = useAxiosPrivate();
   const metadata = JSON.parse(localStorage.getItem("metadata"));
   const currentProfilePicture =
     metadata.profilePicture === "" ? defaultUserImage : metadata.profilePicture;
@@ -53,7 +55,10 @@ const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {
         signature: cloudinaryResponse.data.signature,
       };
 
-      const afterUpdateRes = await axios.post(`${baseUrl}/update`, photoData);
+      const afterUpdateRes = await axiosPrivate.post(
+        `${baseUrl}/update`,
+        photoData
+      );
       if (afterUpdateRes.status !== 200) {
         throw afterUpdateRes.data.message;
       }

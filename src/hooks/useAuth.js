@@ -29,7 +29,7 @@ const useAuth = (body, isFromRegister, setLoading) => {
           const resData = response.data;
 
           if (!isFromRegister) {
-            setAuth({ accessToken: resData.token });
+            setAuth({ accessToken: resData.token, userId: resData.userId });
           }
 
           setData(resData);

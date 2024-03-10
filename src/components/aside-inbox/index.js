@@ -1,7 +1,10 @@
 import Header from "./header";
 import ChatCard from "./chat-card";
 import { useEffect, useState } from "react";
-import { config, defaultUserImage } from "../../constants";
+
+import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 const AsideInbox = ({
   setSelectedConversationId,
   inbox,
@@ -12,6 +15,7 @@ const AsideInbox = ({
   const [query, setQuery] = useState("");
   const [apiQuery, setApiQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       setApiQuery(query);
@@ -22,10 +26,13 @@ const AsideInbox = ({
   }, [query]);
   useEffect(() => {
     if (apiQuery !== "") {
-      fetch(`${config.url}/api/users/search/${apiQuery}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setSearchResults(data.users);
+      axiosPrivate
+        .get(`/users/search/${apiQuery}`) // Axios GET request
+        .then((response) => {
+          setSearchResults(response.data.users); // Use response.data to access the data
+        })
+        .catch((error) => {
+          console.error("Error fetching search results:", error);
         });
     }
   }, [apiQuery]);

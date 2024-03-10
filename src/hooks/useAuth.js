@@ -1,14 +1,12 @@
-import { useEffect, useState, useContext } from "react";
-import { config } from "../constants";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthProvider";
+import axios from "../api/axios";
 
 const useAuth = (body, isFromRegister, setLoading) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-  const baseUrl = `${config.url}/api/auth`;
   const endpoint = isFromRegister ? "register" : "login";
-  const url = `${baseUrl}/${endpoint}`;
+  const url = `/auth/${endpoint}`;
   const { setAuth } = useAuthContext();
   useEffect(() => {
     const fetchData = async () => {

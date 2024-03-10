@@ -11,55 +11,27 @@ const useFetch = ({ endpoint, id, setPercentCompleted = () => {} }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      axiosPrivate
-        .get(url, {
+      try {
+        const response = await axiosPrivate.get(url, {
           onDownloadProgress: function (progressEvent) {
             setPercentCompleted(
               Math.round((progressEvent.loaded * 100) / progressEvent.total)
             );
           },
-        })
-        .then((response) => {
-          setData(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setLoading(false);
-          navigate("/login");
         });
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+        navigate("/login");
+      }
     };
 
     fetchData();
   }, [url]);
 
   return { data, loading };
-};
-
-export const getConversation = (
-  userId,
-  otherUserId,
-  setConversations,
-  setLoading
-) => {
-  const axiosPrivate = useAxiosPrivate();
-  const endpoint = "/conversations";
-  axiosPrivate
-    .get(endpoint, {
-      params: {
-        userId,
-        otherUserId,
-      },
-    })
-    .then((response) => {
-      setConversations(response.data.conversations);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-      navigate("/login");
-    });
 };
 
 export const getInbox = (

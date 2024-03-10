@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
 import Conversations from "./conversations";
-import { getConversation } from "../../hooks/useFetch";
 import { defaultUserImage } from "../../constants";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 const MainChat = ({
   selectedConversationId,
@@ -15,6 +16,9 @@ const MainChat = ({
   if (selectedConversationId === null) return null;
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+  const endpoint = "/conversations";
   useEffect(() => {
     socket?.on("getMessage", (data) => {
       if (data.senderId == selectedConversationId) {
@@ -33,12 +37,22 @@ const MainChat = ({
 
   useEffect(() => {
     setLoading(true);
-    getConversation(
-      userId,
-      selectedConversationId,
-      setConversations,
-      setLoading
-    );
+    axiosPrivate
+      .get(endpoint, {
+        params: {
+          userId,
+          otherUserId: selectedConversationId,
+        },
+      })
+      .then((response) => {
+        setConversations(response.data.conversations);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+        navigate("/login");
+      });
   }, [userId, selectedConversationId]);
 
   useEffect(() => {

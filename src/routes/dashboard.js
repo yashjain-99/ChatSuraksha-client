@@ -8,6 +8,7 @@ import { config } from "../constants";
 import Loader from "../components/loader";
 import { motion, useIsPresent, AnimatePresence } from "framer-motion";
 import UpdateProfilePictureModal from "../components/upload-profile-picture-modal";
+import Add2FaModal from "../components/add-2fa-modal";
 
 const Dashboard = () => {
   const metadata = JSON.parse(localStorage.getItem("metadata"));
@@ -90,6 +91,7 @@ const Dashboard = () => {
       <UpdateProfilePictureModal
         setUserProfilePicture={setUserProfilePicture}
       />
+      <Add2FaModal />
     </div>
   );
 };

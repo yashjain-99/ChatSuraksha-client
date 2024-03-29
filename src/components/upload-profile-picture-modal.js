@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
 import Modal from "react-modal";
 
-import { useProfilePictureModalStateContext } from "../contexts/ProfilePictureModalStateProvider";
 import { config, defaultUserImage } from "../constants";
 import axios from "../api/axios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useModalStateContext } from "../contexts/ModalStateProvider";
+import toast from "react-hot-toast";
 
 const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {
-  const { isModalOpen, setIsModalOpen } = useProfilePictureModalStateContext();
+  const { state, dispatch } = useModalStateContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const axiosPrivate = useAxiosPrivate();
@@ -63,11 +64,11 @@ const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {
         throw afterUpdateRes.data.message;
       }
       // Handle response
-      console.log("Image uploaded successfully");
-      setIsModalOpen(false);
+      toast.success("Image uploaded successfully");
+      dispatch({ type: "TOGGLE_PROFILE_PICTURE_MODAL" });
       setUserProfilePicture(afterUpdateRes.data.updatedProfilePicture);
     } catch (error) {
-      setIsModalOpen(false);
+      dispatch({ type: "TOGGLE_PROFILE_PICTURE_MODAL" });
       console.error("Error uploading image:", error);
     }
   };
@@ -78,8 +79,8 @@ const UpdateProfilePictureModal = ({ setUserProfilePicture }) => {
 
   return (
     <Modal
-      isOpen={isModalOpen}
-      onRequestClose={() => setIsModalOpen(false)}
+      isOpen={state.isProfilePictureModalOpen}
+      onRequestClose={() => dispatch({ type: "TOGGLE_PROFILE_PICTURE_MODAL" })}
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",

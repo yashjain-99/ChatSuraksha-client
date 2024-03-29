@@ -2,20 +2,25 @@ import { config, defaultUserImage } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthContext } from "../../contexts/AuthProvider";
-import { useProfilePictureModalStateContext } from "../../contexts/ProfilePictureModalStateProvider";
-import axios from "../../api/axios";
+import { useModalStateContext } from "../../contexts/ModalStateProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const Header = ({ metadata, userProfilePicture }) => {
   const { setAuth } = useAuthContext();
   const [showDropDown, setShowDropDown] = useState(false);
-  const { setIsModalOpen } = useProfilePictureModalStateContext();
+  const { dispatch } = useModalStateContext();
   const axiosPrivate = useAxiosPrivate();
 
   const openUpdateProfilePictureModal = () => {
     setShowDropDown(false);
-    setIsModalOpen(true);
+    dispatch({ type: "TOGGLE_PROFILE_PICTURE_MODAL" });
   };
+
+  const open2faModal = () => {
+    setShowDropDown(false);
+    dispatch({ type: "TOGGLE_2FA_MODAL" });
+  };
+
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -89,6 +94,9 @@ const Header = ({ metadata, userProfilePicture }) => {
             onClick={() => openUpdateProfilePictureModal()}
           >
             <span>Update profile picture</span>
+          </div>
+          <div className="drop-down-menu-item" onClick={() => open2faModal()}>
+            <span>Add/Update TOTP 2FA</span>
           </div>
         </div>
       </div>

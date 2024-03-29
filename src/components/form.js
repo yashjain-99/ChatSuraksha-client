@@ -5,6 +5,7 @@ import useValidate from "../hooks/useValidateFormData";
 import FormBackground from "./form-background";
 import useFormattedUserInput from "../hooks/useFormattedUserInput";
 import Loader from "./loader";
+import toast from "react-hot-toast";
 
 const Form = ({ isFromRegister = false }) => {
   const [data, setData] = useState({});
@@ -21,10 +22,12 @@ const Form = ({ isFromRegister = false }) => {
     if (loading) {
       console.log("Loading...");
     } else if (metadataError) {
-      alert(metadataError);
+      toast.error(metadataError);
       console.log(metadataError);
     } else if (metadata) {
-      alert("Success");
+      toast("Good to Go!", {
+        icon: "🚀",
+      });
       if (isFromRegister) {
         navigate("/login");
       } else {
@@ -41,7 +44,7 @@ const Form = ({ isFromRegister = false }) => {
     const formDataJson = Object.fromEntries(formData);
     const { error, isValid } = useValidate(formDataJson, isFromRegister);
     if (!isValid) {
-      alert(error);
+      toast.error(error);
       setLoading(false);
       return;
     }
